@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import HeroAnimation from '@/components/HeroAnimation'
+import { getAssetPath } from '@/lib/basePath'
 
 export default function HomePage() {
   return (
@@ -18,7 +19,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div className="image-zoom-container aspect-[3/4] relative">
                 <img
-                  src="/images/hera_necklace.png"
+                  src={getAssetPath('/images/hera_necklace.png')}
                   alt="Hera Necklace - Handcrafted Tunisian Gold"
                   className="w-full h-full object-cover"
                 />
@@ -80,7 +81,7 @@ export default function HomePage() {
               <Link href="/collection?category=necklaces" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="/images/necklace_outside.png"
+                    src={getAssetPath('/images/necklace_outside.png')}
                     alt="Jasmine Collection"
                     className="w-full h-full object-cover"
                   />
@@ -98,7 +99,7 @@ export default function HomePage() {
               <Link href="/collection?category=bracelets" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="/images/armband_jeans.png"
+                    src={getAssetPath('/images/armband_jeans.png')}
                     alt="Sahara Collection"
                     className="w-full h-full object-cover"
                   />
@@ -116,7 +117,7 @@ export default function HomePage() {
               <Link href="/collection?category=rings" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="/images/chains.png"
+                    src={getAssetPath('/images/chains.png')}
                     alt="Medina Collection"
                     className="w-full h-full object-cover"
                   />

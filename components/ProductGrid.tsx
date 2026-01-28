@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { getAssetPath } from '@/lib/basePath'
 
 interface ProductGridProps {
   category?: string
@@ -74,7 +75,7 @@ export default function ProductGrid({ category }: ProductGridProps) {
               <div className="image-zoom-container aspect-[3/4] bg-white mb-4 relative">
                 {product.images[0] ? (
                   <img
-                    src={product.images[0]}
+                    src={getAssetPath(product.images[0])}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />

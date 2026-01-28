@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { getAssetPath } from '@/lib/basePath'
 
 const TOTAL_FRAMES = 80
-const IMAGE_PREFIX = '/images/hero_animation/Whisk_cjzlztywgzm4ugm40yyjvmytqtmwqtljhjml1sz_'
 
 function getFramePath(frameIndex: number): string {
-  return `${IMAGE_PREFIX}${frameIndex.toString().padStart(3, '0')}.jpg`
+  return getAssetPath(`/images/hero_animation/Whisk_cjzlztywgzm4ugm40yyjvmytqtmwqtljhjml1sz_${frameIndex.toString().padStart(3, '0')}.jpg`)
 }
 
 export default function HeroAnimation() {
