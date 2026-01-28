@@ -1,17 +1,55 @@
+'use client'
+
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
-import Image from 'next/image'
 
 interface ProductGridProps {
   category?: string
 }
 
-export default async function ProductGrid({ category }: ProductGridProps) {
-  // Fetch products from database
-  const products = await prisma.product.findMany({
-    where: category ? { category } : undefined,
-    orderBy: { createdAt: 'desc' },
-  })
+// Static placeholder products for GitHub Pages demo
+const placeholderProducts = [
+  {
+    id: '1',
+    name: 'Jasmine Pendant',
+    description: 'Delicate 18k gold pendant inspired by Tunisian jasmine flowers',
+    price: 450,
+    images: ['/images/necklace_outside.png'],
+    category: 'necklaces',
+    inStock: true,
+  },
+  {
+    id: '2',
+    name: 'Sahara Cuff',
+    description: 'Bold gold cuff bracelet with desert-inspired textures',
+    price: 680,
+    images: ['/images/armband_jeans.png'],
+    category: 'bracelets',
+    inStock: true,
+  },
+  {
+    id: '3',
+    name: 'Medina Chain',
+    description: 'Intricate chain necklace echoing the winding streets of the Medina',
+    price: 520,
+    images: ['/images/chains.png'],
+    category: 'necklaces',
+    inStock: true,
+  },
+  {
+    id: '4',
+    name: 'Hera Statement Necklace',
+    description: 'Stunning statement piece with traditional Tunisian craftsmanship',
+    price: 890,
+    images: ['/images/hera_necklace.png'],
+    category: 'necklaces',
+    inStock: true,
+  },
+]
+
+export default function ProductGrid({ category }: ProductGridProps) {
+  const products = category
+    ? placeholderProducts.filter(p => p.category === category)
+    : placeholderProducts
 
   if (products.length === 0) {
     return (

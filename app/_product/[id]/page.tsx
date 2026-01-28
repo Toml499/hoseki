@@ -4,6 +4,11 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import AddToCartButton from '@/components/AddToCartButton'
 
+// For static export - no product pages pre-rendered
+export function generateStaticParams() {
+  return []
+}
+
 export default async function ProductDetailPage({
   params,
 }: {

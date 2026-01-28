@@ -4,6 +4,11 @@ import { prisma } from '@/lib/prisma'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
+// For static export - no order pages pre-rendered
+export function generateStaticParams() {
+  return []
+}
+
 export default async function OrderConfirmationPage({
   params,
 }: {

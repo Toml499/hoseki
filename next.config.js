@@ -5,7 +5,16 @@ const nextConfig = {
   assetPrefix: process.env.NODE_ENV === 'production' ? '/hoseki/' : '',
   images: {
     unoptimized: true,
-    domains: ['images.unsplash.com', 'cdn.shopify.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+      },
+    ],
   },
   trailingSlash: true,
 }
