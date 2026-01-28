@@ -1,50 +1,16 @@
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import HeroAnimation from '@/components/HeroAnimation'
 
 export default function HomePage() {
   return (
     <>
       <Navigation />
 
-      <main className="flex-grow pt-20">
-        {/* Hero Section */}
-        <section className="relative h-[90vh] flex items-center justify-center overflow-hidden px-6 lg:px-12">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&q=80&w=2000"
-              alt="Tunisian Handcrafted Jewelry"
-              className="w-full h-full object-cover opacity-15"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-ivory"></div>
-          </div>
-          <div className="relative z-10 text-center max-w-5xl fade-in-up">
-            <span className="text-xs uppercase tracking-[0.5em] mb-6 block text-gold font-medium">
-              Handcrafted in Tunisia • Since 1988
-            </span>
-            <h1 className="text-6xl md:text-8xl font-light mb-8 leading-tight">
-              The soul of Tunis, <br/>
-              <span className="italic font-serif">sculpted in gold.</span>
-            </h1>
-            <p className="text-lg max-w-2xl mx-auto mb-10 text-gray-600 font-light leading-relaxed">
-              Discover an ancestral legacy of artisanal brilliance, where the Mediterranean light meets the heritage of the Medina.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link
-                href="/collection"
-                className="bg-black text-white px-10 py-4 text-xs uppercase tracking-[0.2em] hover:bg-gold transition-all duration-300"
-              >
-                The Collection
-              </Link>
-              <Link
-                href="/about"
-                className="border border-black px-10 py-4 text-xs uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all duration-300"
-              >
-                Heritage
-              </Link>
-            </div>
-          </div>
-        </section>
+      <main className="flex-grow">
+        {/* Hero Animation Section */}
+        <HeroAnimation />
 
         {/* Our Story Section */}
         <section className="py-32 bg-white relative overflow-hidden">
@@ -52,11 +18,11 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div className="image-zoom-container aspect-[3/4] relative">
                 <img
-                  src="https://images.unsplash.com/photo-1621350289139-445699709d73?auto=format&fit=crop&q=80&w=1200"
-                  alt="Artisan working in Tunis Medina"
+                  src="/images/hera_necklace.png"
+                  alt="Hera Necklace - Handcrafted Tunisian Gold"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute -bottom-10 -right-10 hidden lg:block">
+                <div className="absolute -top-6 -left-6 hidden lg:block">
                   <div className="bg-ivory p-8 border border-black/5 shadow-xl max-w-xs">
                     <span className="text-3xl font-light font-serif text-gold">1988</span>
                     <p className="text-sm text-gray-500 mt-2 italic">
@@ -114,7 +80,7 @@ export default function HomePage() {
               <Link href="/collection?category=necklaces" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=1000"
+                    src="/images/necklace_outside.png"
                     alt="Jasmine Collection"
                     className="w-full h-full object-cover"
                   />
@@ -132,7 +98,7 @@ export default function HomePage() {
               <Link href="/collection?category=bracelets" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1611085583191-a3b130a88d4a?auto=format&fit=crop&q=80&w=1000"
+                    src="/images/armband_jeans.png"
                     alt="Sahara Collection"
                     className="w-full h-full object-cover"
                   />
@@ -150,7 +116,7 @@ export default function HomePage() {
               <Link href="/collection?category=rings" className="group cursor-pointer block">
                 <div className="image-zoom-container aspect-[4/5] bg-white mb-6">
                   <img
-                    src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=1000"
+                    src="/images/chains.png"
                     alt="Medina Collection"
                     className="w-full h-full object-cover"
                   />
