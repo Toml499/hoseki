@@ -13,11 +13,12 @@ function getFramePath(frameIndex: number): string {
 export default function HeroAnimation() {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const imagesRef = useRef<HTMLImageElement[]>([])
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([])
   const currentFrameRef = useRef(0)
   const rafRef = useRef<number | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [isReady, setIsReady] = useState(false)
+  const [firstFrameReady, setFirstFrameReady] = useState(false)
 
   // Resize canvas to match container with device pixel ratio
   const resizeCanvas = useCallback(() => {
@@ -42,9 +43,26 @@ export default function HeroAnimation() {
   const drawFrame = useCallback((frameIndex: number) => {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
-    const img = imagesRef.current[frameIndex]
 
-    if (!canvas || !ctx || !img) return
+    if (!canvas || !ctx) return
+
+    // Find the requested frame or nearest available frame
+    let img = imagesRef.current[frameIndex]
+    if (!img) {
+      // Find nearest loaded frame
+      for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+        if (imagesRef.current[frameIndex - offset]) {
+          img = imagesRef.current[frameIndex - offset]
+          break
+        }
+        if (imagesRef.current[frameIndex + offset]) {
+          img = imagesRef.current[frameIndex + offset]
+          break
+        }
+      }
+    }
+
+    if (!img) return
 
     const rect = canvas.getBoundingClientRect()
     const dpr = window.devicePixelRatio || 1
@@ -93,47 +111,66 @@ export default function HeroAnimation() {
     resizeCanvas()
   }, [resizeCanvas])
 
-  // Preload and decode all images
+  // Preload and decode all images in parallel
   useEffect(() => {
-    const loadImages = async () => {
-      const images: HTMLImageElement[] = []
+    let loadedCount = 0
+    const images: (HTMLImageElement | null)[] = new Array(TOTAL_FRAMES).fill(null)
+    let firstFrameDrawn = false
 
-      for (let i = 0; i < TOTAL_FRAMES; i++) {
+    const loadImage = (index: number): Promise<void> => {
+      return new Promise((resolve) => {
         const img = new window.Image()
-        img.src = getFramePath(i)
+        img.src = getFramePath(index)
 
-        await new Promise<void>((resolve) => {
-          img.onload = async () => {
-            // Pre-decode the image for faster rendering
-            try {
-              await img.decode()
-            } catch {
-              // Decode not supported, continue anyway
-            }
-            images.push(img)
-            setLoadingProgress(Math.round(((i + 1) / TOTAL_FRAMES) * 100))
-            resolve()
+        img.onload = async () => {
+          try {
+            await img.decode()
+          } catch {
+            // Decode not supported, continue anyway
           }
-          img.onerror = () => resolve()
-        })
-      }
+          images[index] = img
+          loadedCount++
+          setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100))
 
-      imagesRef.current = images
-      setIsReady(true)
+          // Draw first frame immediately when it loads
+          if (index === 0 && !firstFrameDrawn) {
+            firstFrameDrawn = true
+            imagesRef.current = images
+            setFirstFrameReady(true)
+            requestAnimationFrame(() => {
+              resizeCanvas()
+              drawFrame(0)
+            })
+          }
 
-      // Draw first frame after a short delay to ensure canvas is sized
-      requestAnimationFrame(() => {
-        resizeCanvas()
-        drawFrame(0)
+          // Mark ready when all images are loaded
+          if (loadedCount === TOTAL_FRAMES) {
+            imagesRef.current = images as HTMLImageElement[]
+            setIsReady(true)
+          }
+
+          resolve()
+        }
+
+        img.onerror = () => {
+          loadedCount++
+          setLoadingProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100))
+          if (loadedCount === TOTAL_FRAMES) {
+            imagesRef.current = images.filter(Boolean) as HTMLImageElement[]
+            setIsReady(true)
+          }
+          resolve()
+        }
       })
     }
 
-    loadImages()
+    // Load all images in parallel
+    Promise.all(Array.from({ length: TOTAL_FRAMES }, (_, i) => loadImage(i)))
   }, [drawFrame, resizeCanvas])
 
   // Handle scroll-based animation with requestAnimationFrame
   useEffect(() => {
-    if (!isReady) return
+    if (!firstFrameReady) return
 
     let ticking = false
 
@@ -186,7 +223,7 @@ export default function HeroAnimation() {
         cancelAnimationFrame(rafRef.current)
       }
     }
-  }, [isReady, drawFrame, resizeCanvas])
+  }, [firstFrameReady, drawFrame, resizeCanvas])
 
   return (
     <section
@@ -201,8 +238,8 @@ export default function HeroAnimation() {
           className="absolute inset-0 w-full h-full"
         />
 
-        {/* Loading overlay */}
-        {!isReady && (
+        {/* Loading overlay - hide as soon as first frame loads */}
+        {!firstFrameReady && (
           <div className="absolute inset-0 bg-black flex items-center justify-center z-20">
             <div className="text-center text-white">
               <div className="w-48 h-1 bg-white/20 rounded-full overflow-hidden">
@@ -212,7 +249,7 @@ export default function HeroAnimation() {
                 />
               </div>
               <p className="mt-4 text-sm tracking-widest uppercase opacity-60">
-                Loading {loadingProgress}%
+                Loading...
               </p>
             </div>
           </div>
