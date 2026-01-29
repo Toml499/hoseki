@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { getAssetPath } from '@/lib/basePath'
 
 interface ProductGridProps {
@@ -67,10 +66,9 @@ export default function ProductGrid({ category }: ProductGridProps) {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product) => (
-            <Link
+            <div
               key={product.id}
-              href={`/product/${product.id}`}
-              className="group block"
+              className="group block cursor-pointer"
             >
               <div className="image-zoom-container aspect-[3/4] bg-white mb-4 relative">
                 {product.images[0] ? (
@@ -103,7 +101,7 @@ export default function ProductGrid({ category }: ProductGridProps) {
                   ${product.price.toFixed(2)}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
